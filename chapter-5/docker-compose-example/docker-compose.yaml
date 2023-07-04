@@ -1,0 +1,30 @@
+version: '3'
+services:
+  php:
+    build:
+      context: web-app/
+      dockerfile: Dockerfile
+    # image: php:8.2-apache
+    volumes:
+      - ./web-app/:/var/www/html/
+    ports:
+      - 8000:80
+    environment:
+      DB_HOST: mysql-container
+      DB_USER: root
+      DB_PASSWORD: secret-password
+      DB_NAME: mydb
+    depends_on:
+      - mysql-container
+      - redis
+
+  mysql-container:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: secret-password
+      MYSQL_DATABASE: mydb
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
