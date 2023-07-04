@@ -1,7 +1,14 @@
-FROM node:18
+FROM node:18-alpine
 
+# Create app directory
 WORKDIR /usr/src/app
-COPY ./src/index.js ./
 
-EXPOSE 80
-CMD [ "node", "index.js" ]
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY src/package*.json ./
+
+RUN npm install
+COPY src/ .
+EXPOSE 8080
+CMD [ "node", "server.js" ]
